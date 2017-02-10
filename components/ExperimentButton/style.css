@@ -1,0 +1,13 @@
+:local(.A) {
+}
+
+:local(.A button) {
+    color: red;
+}
+
+:local(.B) {
+}
+
+:local(.B button) {
+    color: green;
+}
