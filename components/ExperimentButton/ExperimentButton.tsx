@@ -17,7 +17,6 @@ export class ExperimentButton extends React.Component<any, States> {
     }
     toggleVariant() {
         this.setState((prevState: States) => {
-            console.log(this.state);
             return {
                 variant: prevState.variant == 'A' ? 'B' : 'A'
             }
@@ -29,16 +28,16 @@ export class ExperimentButton extends React.Component<any, States> {
     render() {
         return (
             <div>
-                <div className={styleA.outer}>
+                <div className={this.style.outer}>
                     <button
-                        className={`btn btn-default ${styleA.button}`}
+                        className={`btn btn-default ${this.style.button}`}
                         onClick={() => this.toggleVariant()}>
-                        Experiment A Button
+                        Variant {this.state.variant} Button 1
                     </button>
                 </div>
                 <button
-                    className={`btn btn-default ${styleA.button}`}>
-                Experiment B Button
+                    className={`btn btn-default ${this.style.button}`}>
+                    Variant {this.state.variant} Button 2
                 </button>
             </div>
         );
