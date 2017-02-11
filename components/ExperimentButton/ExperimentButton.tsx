@@ -26,17 +26,18 @@ export class ExperimentButton extends React.Component<any, States> {
         return this.state.variant == 'A' ? styleA : styleB;
     }
     render() {
+        const style = this.style;
         return (
             <div>
-                <div className={this.style.outer}>
+                <div className={style.outer}>
                     <button
-                        className={`btn btn-default ${this.style.button}`}
+                        className={`btn btn-default ${style.button}`}
                         onClick={() => this.toggleVariant()}>
                         Variant {this.state.variant} Button 1
                     </button>
                 </div>
                 <button
-                    className={`btn btn-default ${this.style.button}`}>
+                    className={`btn btn-default ${style.button}`}>
                     Variant {this.state.variant} Button 2
                 </button>
             </div>
