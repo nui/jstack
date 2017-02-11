@@ -11,7 +11,8 @@ ReactDOM.render(
             <div className="row">
                 <div className="col-xs-12">
                     <h1>Hello, world!</h1>
-                    <button type="button" className="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <button type="button" className="btn btn-default dropdown-toggle" data-toggle="dropdown"
+                            aria-haspopup="true" aria-expanded="false">
                         Action <span className="caret"></span>
                     </button>
                     <ExperimentButton />
