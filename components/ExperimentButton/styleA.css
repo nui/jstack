@@ -1,0 +1,11 @@
+.outer {
+    padding: 10px;
+}
+
+.outer > .button {
+    color: red;
+}
+
+.button {
+    color: magenta;
+}

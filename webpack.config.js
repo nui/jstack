@@ -7,10 +7,12 @@ module.exports = function (env) {
     var css_rules;
     var plugins;
     if (env == 'dev') {
-        css_rules = [{ loader: "style-loader"}, { loader: "css-loader"}];
+        css_rules = [
+            { loader: "style-loader"},
+            { loader: "css-loader", options: {modules: true}}];
     }
     else {
-        css_rules = ExtractTextPlugin.extract({fallback: 'style-loader', use: 'css-loader' })
+        css_rules = ExtractTextPlugin.extract({fallback: 'style-loader', use: { loader: "css-loader", options: {modules: true}} });
         plugins = [
             new ExtractTextPlugin("styles.css"),
             new OptimizeCssAssetsPlugin(),

@@ -1,5 +1,7 @@
 import * as React from 'react';
-const s = require('./style');
+
+const styleA = require('./styleA');
+const styleB = require('./styleB');
 
 interface States {
     variant: string;
@@ -21,11 +23,22 @@ export class ExperimentButton extends React.Component<any, States> {
             }
         });
     }
+    get style() {
+        return this.state.variant == 'A' ? styleA : styleB;
+    }
     render() {
         return (
-            <div className={s[this.state.variant]}>
-                <button onClick={() => this.toggleVariant()}>
-                    Experiment Button
+            <div>
+                <div className={styleA.outer}>
+                    <button
+                        className={`btn btn-default ${styleA.button}`}
+                        onClick={() => this.toggleVariant()}>
+                        Experiment A Button
+                    </button>
+                </div>
+                <button
+                    className={`btn btn-default ${styleA.button}`}>
+                Experiment B Button
                 </button>
             </div>
         );
