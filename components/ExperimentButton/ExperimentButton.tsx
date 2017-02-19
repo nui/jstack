@@ -40,6 +40,12 @@ export class ExperimentButton extends React.Component<any, States> {
                     className={`btn btn-default ${style.button}`}>
                     Variant {this.state.variant} Button 2
                 </button>
+                <div className="some-global-class">
+                    <button
+                        className={`btn btn-default ${style.button}`}>
+                        Variant {this.state.variant} Button 2
+                    </button>
+                </div>
             </div>
         );
     }

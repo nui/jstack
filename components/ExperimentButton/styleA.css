@@ -9,3 +9,7 @@
 .outer > .button {
     color: red;
 }
+
+:global(.some-global-class) .button {
+    color: blueviolet;
+}
