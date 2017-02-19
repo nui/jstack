@@ -2,7 +2,6 @@ var path = require('path');
 
 module.exports = {
     entry: {
-        vendor: ['react', 'react-dom', 'react-bootstrap'],
         app: './components/App/App.tsx'
     },
     resolve: {

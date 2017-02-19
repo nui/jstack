@@ -2,7 +2,13 @@ var webpack = require('webpack');
 var ExtractTextPlugin = require("extract-text-webpack-plugin");
 var OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 
-module.exports = Object.assign({}, require('./webpack.common'), {
+var common = require('./webpack.common');
+
+module.exports = Object.assign({}, common, {
+    entry: Object.assign({}, common.entry, {
+        // Split common chunk for production config
+        vendor: ['react', 'react-dom', 'react-bootstrap']
+    }),
     module: {
         rules: [
             {test: /\.tsx?$/, loader: 'ts-loader'},
@@ -17,7 +23,7 @@ module.exports = Object.assign({}, require('./webpack.common'), {
     },
     devtool: 'source-map',
     plugins: [
-        new ExtractTextPlugin("styles.css"),
+        new ExtractTextPlugin({filename: "[name].css"}),
         new OptimizeCssAssetsPlugin(),
         new webpack.DefinePlugin({
             'process.env': {
