@@ -19,6 +19,16 @@ module.exports = Object.assign({}, require('./webpack.common'), {
     plugins: [
         new ExtractTextPlugin("styles.css"),
         new OptimizeCssAssetsPlugin(),
-        new webpack.optimize.UglifyJsPlugin({sourceMap: true})
+        new webpack.DefinePlugin({
+            'process.env': {
+                NODE_ENV: JSON.stringify('production')
+            }
+        }),
+        new webpack.optimize.UglifyJsPlugin({sourceMap: true}),
+        new webpack.optimize.CommonsChunkPlugin({
+            name: "vendor",
+            filename: "vendor.js",
+            minChunks: Infinity
+        })
     ]
 });
