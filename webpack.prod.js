@@ -29,6 +29,11 @@ module.exports = Object.assign({}, require('./webpack.common'), {
             name: "vendor",
             filename: "vendor.js",
             minChunks: Infinity
-        })
+        }),
+        // https://webpack.js.org/plugins/provide-plugin/
+        // new webpack.ProvidePlugin({
+        //     $: 'jquery',
+        //     jQuery: 'jquery'
+        // })
     ]
 });
