@@ -11,7 +11,7 @@
   "repository": {},
   "devDependencies": {
     "@types/node": "^7.0.5",
-    "@types/react": "^15.0.9",
+    "@types/react": "^15.0.11",
     "css-loader": "^0.26.1",
     "extract-text-webpack-plugin": "2.0.0-rc.3",
     "gulp": "^3.9.1",
