@@ -17,13 +17,14 @@ module.exports = {
             }
         ]
     },
+    devtool: 'source-map',
     resolve: {
         extensions: ['.ts', '.tsx', '.js', '.css']
     },
     plugins: [
         new ExtractTextPlugin("styles.css"),
         new OptimizeCssAssetsPlugin(),
-        new webpack.optimize.UglifyJsPlugin()
+        new webpack.optimize.UglifyJsPlugin({sourceMap: true})
     ],
     output: {
         path: path.resolve(__dirname, "dist"),
