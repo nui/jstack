@@ -1,3 +1,4 @@
+var del = require('del');
 var gulp = require('gulp');
 var gutil = require('gulp-util');
 var webpack = require('webpack');
@@ -33,4 +34,10 @@ gulp.task('webpack', function (callback) {
         gutil.log("[webpack]", stats.toString(webpackStats));
         callback();
     });
+});
+
+gulp.task('clean', function () {
+    return del([
+        'dist/**/*'
+    ]);
 });
