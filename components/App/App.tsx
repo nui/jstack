@@ -1,8 +1,6 @@
-import * as React from 'react';
-import * as ReactDOM from 'react-dom';
-
-import {Button, ButtonToolbar, DropdownButton, MenuItem} from 'react-bootstrap';
-
+import * as React from "react";
+import * as ReactDOM from "react-dom";
+import {Button, ButtonToolbar, DropdownButton, MenuItem} from "react-bootstrap";
 import {ExperimentButton} from "../ExperimentButton/ExperimentButton";
 
 ReactDOM.render(

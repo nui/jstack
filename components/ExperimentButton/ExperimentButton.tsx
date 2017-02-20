@@ -1,4 +1,4 @@
-import * as React from 'react';
+import * as React from "react";
 
 const styleA = require('./styleA');
 const styleB = require('./styleB');
@@ -8,13 +8,13 @@ interface States {
 }
 
 export class ExperimentButton extends React.Component<any, States> {
-    constructor(props: any)
-    {
+    constructor(props: any) {
         super();
         this.state = {
             variant: 'A'
         };
     }
+
     toggleVariant() {
         this.setState((prevState: States) => {
             return {
@@ -22,9 +22,11 @@ export class ExperimentButton extends React.Component<any, States> {
             }
         });
     }
+
     get style() {
         return this.state.variant == 'A' ? styleA : styleB;
     }
+
     render() {
         const style = this.style;
         return (
