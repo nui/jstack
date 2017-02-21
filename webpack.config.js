@@ -1,4 +1,4 @@
-module.exports = Object.assign({}, require('./webpack.common'), {
+module.exports = Object.assign({}, require('./webpack.base'), {
     module: {
         rules: [
             {test: /\.tsx?$/, loader: 'ts-loader'},

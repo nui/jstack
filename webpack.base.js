@@ -11,5 +11,9 @@ module.exports = {
         path: path.resolve(__dirname, "dist"),
         publicPath: "/assets/",
         filename: '[name].js'
+    },
+    stats: {
+        colors: true,
+        chunks: false
     }
 };

@@ -2,7 +2,7 @@ var webpack = require('webpack');
 var ExtractTextPlugin = require("extract-text-webpack-plugin");
 var OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 
-var common = require('./webpack.common');
+var common = require('./webpack.base');
 
 module.exports = Object.assign({}, common, {
     entry: Object.assign({}, common.entry, {
