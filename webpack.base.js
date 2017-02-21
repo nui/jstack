@@ -1,16 +1,27 @@
 var path = require('path');
+var ExtractTextPlugin = require("extract-text-webpack-plugin");
 
 module.exports = {
     entry: {
         app: './components/App/App.tsx'
     },
+    module: {
+        rules: [{test: /\.tsx?$/, loader: 'ts-loader'}, {
+            test: /\.css$/,
+            use: ExtractTextPlugin.extract({
+                fallback: 'style-loader',
+                use: {loader: "css-loader", options: {modules: true}}
+            })
+        }
+        ]
+    },
     resolve: {
-        extensions: ['.ts', '.tsx', '.js', '.css']
+        extensions: ['.css', '.js', '.ts', '.tsx']
     },
     output: {
+        filename: '[name].[chunkhash].js',
         path: path.resolve(__dirname, "dist"),
-        publicPath: "/assets/",
-        filename: '[name].js'
+        publicPath: "/assets/"
     },
     stats: {
         colors: true,

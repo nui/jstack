@@ -1,6 +1,8 @@
-var webpack = require('webpack');
+var AssetsPlugin = require('assets-webpack-plugin');
 var ExtractTextPlugin = require("extract-text-webpack-plugin");
 var OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
+var path = require('path');
+var webpack = require('webpack');
 
 var common = require('./webpack.base');
 
@@ -9,22 +11,22 @@ module.exports = Object.assign({}, common, {
         // Split common chunk for production config
         vendor: ['react', 'react-dom', 'react-bootstrap']
     }),
-    module: {
-        rules: [
-            {test: /\.tsx?$/, loader: 'ts-loader'},
-            {
-                test: /\.css$/,
-                use: ExtractTextPlugin.extract({
-                    fallback: 'style-loader',
-                    use: {loader: "css-loader", options: {modules: true}}
-                })
-            }
-        ]
-    },
     devtool: 'source-map',
     plugins: [
-        new ExtractTextPlugin({filename: "[name].css"}),
+        new AssetsPlugin({
+            fullPath: false,
+            path: path.join(__dirname, 'dist'),
+            prettyPrint: true
+        }),
+        new ExtractTextPlugin({filename: "[name].[chunkhash].css"}),
+        new webpack.optimize.CommonsChunkPlugin({
+            filename: "vendor.[chunkhash].js",
+            minChunks: Infinity,
+            name: "vendor"
+        }),
+
         new OptimizeCssAssetsPlugin(),
+        new webpack.optimize.UglifyJsPlugin({sourceMap: true}),
 
         // See https://facebook.github.io/react/docs/optimizing-performance.html#use-the-production-build
         new webpack.DefinePlugin({
@@ -33,12 +35,6 @@ module.exports = Object.assign({}, common, {
             }
         }),
 
-        new webpack.optimize.UglifyJsPlugin({sourceMap: true}),
-        new webpack.optimize.CommonsChunkPlugin({
-            name: "vendor",
-            filename: "vendor.js",
-            minChunks: Infinity
-        })
         // https://webpack.js.org/plugins/provide-plugin/
         // new webpack.ProvidePlugin({
         //     $: 'jquery',
