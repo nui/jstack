@@ -4,13 +4,7 @@ var OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 var path = require('path');
 var webpack = require('webpack');
 
-var common = require('./webpack.base');
-
-module.exports = Object.assign({}, common, {
-    entry: Object.assign({}, common.entry, {
-        // Split common chunk for production config
-        vendor: ['react', 'react-dom', 'react-bootstrap']
-    }),
+module.exports = Object.assign({}, require('./webpack.base'), {
     devtool: 'source-map',
     plugins: [
         new AssetsPlugin({
