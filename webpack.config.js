@@ -12,9 +12,9 @@ module.exports = Object.assign({}, require('./webpack.base'), {
             path: path.join(__dirname, 'dist'),
             prettyPrint: true
         }),
-        new ExtractTextPlugin({filename: "[name].[chunkhash].css"}),
+        new ExtractTextPlugin({filename: "[name]-[chunkhash].css"}),
         new webpack.optimize.CommonsChunkPlugin({
-            filename: "vendor.[chunkhash].js",
+            filename: "vendor-[chunkhash].js",
             minChunks: Infinity,
             name: "vendor"
         })
