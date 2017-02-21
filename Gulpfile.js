@@ -4,8 +4,6 @@ var gutil = require('gulp-util');
 var webpack = require('webpack');
 var WebpackDevServer = require('webpack-dev-server');
 
-var config = require('./webpack.base');
-
 gulp.task('default', ['webpack-dev-server']);
 gulp.task('start', ['webpack-dev-server']);
 
@@ -23,9 +21,17 @@ gulp.task('webpack-dev-server', function (callback) {
     });
 });
 
+gulp.task('watch', function (callback) {
+    var config = require('./webpack.config');
+    webpack(config).watch({}, function (err, stats) {
+        if (err) throw new gutil.PluginError("webpack", err);
+        gutil.log("[webpack]", stats.toString(config.stats));
+    });
+});
+
 gulp.task('bundle', function (callback) {
-    // run webpack
-    webpack(require('./webpack.prod'), function (err, stats) {
+    var config = require('./webpack.prod');
+    webpack(config, function (err, stats) {
         if (err) throw new gutil.PluginError("webpack", err);
         gutil.log("[webpack]", stats.toString(config.stats));
         callback();
