@@ -16,9 +16,8 @@ module.exports = Object.assign({}, baseConfig, {
         new ExtractTextPlugin({filename: "[name].css"}),
         new webpack.optimize.CommonsChunkPlugin({
             filename: "vendor.js",
-            minChunks: Infinity,
             name: "vendor"
-        })
+        }),
     ],
     output: Object.assign({}, baseConfig.output, {
         filename: '[name].js',
