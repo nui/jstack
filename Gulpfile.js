@@ -27,7 +27,7 @@ gulp.task('start', function (callback) {
     });
 });
 
-gulp.task('webpack', function (callback) {
+gulp.task('bundle', function (callback) {
     // run webpack
     webpack(require('./webpack.prod'), function (err, stats) {
         if (err) throw new gutil.PluginError("webpack", err);
