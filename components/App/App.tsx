@@ -9,7 +9,7 @@ ReactDOM.render(
             <div className="row">
                 <div className="col-xs-12">
                     <h1>Hello, world!</h1>
-                    <DropdownButton title="Dropdown">
+                    <DropdownButton id="dropdown" title="Dropdown">
                         <MenuItem eventKey="1">Dropdown link</MenuItem>
                         <MenuItem eventKey="2">Dropdown link</MenuItem>
                     </DropdownButton>
