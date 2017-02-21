@@ -8,7 +8,8 @@ gulp.task('default', ['webpack-dev-server']);
 gulp.task('start', ['webpack-dev-server']);
 
 gulp.task('webpack-dev-server', function (callback) {
-    var compiler = webpack(require('./webpack.config'));
+    var config = require('./webpack.config');
+    var compiler = webpack(config);
 
     new WebpackDevServer(compiler, {
         stats: config.stats
