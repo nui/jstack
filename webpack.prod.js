@@ -17,8 +17,7 @@ module.exports = Object.assign({}, baseConfig, {
         new ExtractTextPlugin({filename: "[name]-[chunkhash].css"}),
         new webpack.optimize.CommonsChunkPlugin({
             filename: "vendor-[chunkhash].js",
-            minChunks: Infinity,
-            name: "vendor"
+            name: "vendor",
         }),
 
         new OptimizeCssAssetsPlugin(),
