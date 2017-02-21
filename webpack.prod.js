@@ -4,7 +4,9 @@ var OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 var path = require('path');
 var webpack = require('webpack');
 
-module.exports = Object.assign({}, require('./webpack.base'), {
+var baseConfig = require('./webpack.base');
+
+module.exports = Object.assign({}, baseConfig, {
     devtool: 'source-map',
     plugins: [
         new AssetsPlugin({
@@ -34,5 +36,8 @@ module.exports = Object.assign({}, require('./webpack.base'), {
         //     $: 'jquery',
         //     jQuery: 'jquery'
         // })
-    ]
+    ],
+    output: Object.assign({}, baseConfig.output, {
+        filename: '[name]-[chunkhash].js',
+    })
 });
