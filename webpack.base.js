@@ -4,6 +4,7 @@ var ExtractTextPlugin = require("extract-text-webpack-plugin");
 module.exports = {
     entry: {
         app: './components/App/App.tsx',
+        app2: './components/App2/App2.tsx',
     },
     module: {
         rules: [{test: /\.tsx?$/, loader: 'ts-loader'}, {
