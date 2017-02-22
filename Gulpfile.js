@@ -11,22 +11,20 @@ gulp.task('webpack-dev-server', function (callback) {
     var config = require('./webpack.config');
     var compiler = webpack(config);
 
-    new WebpackDevServer(compiler, {
+    // server and middleware options
+    var devServerConfig = Object.assign({}, {
         stats: config.stats,
-        proxy: {
-            '/backend': {
-                target: 'http://localhost:8000',
-                pathRewrite: {"^/backend": ""}
-            }
-        },
-        publicPath: '/assets'
-        // server and middleware options
-    }).listen(8080, "localhost", function (err) {
-        if (err) throw new gutil.PluginError("webpack-dev-server", err);
-        // Server listening
-        gutil.log("[webpack-dev-server]", "http://localhost:8080/webpack-dev-server/backend");
-        callback();
+        proxy: config.devServer.proxy,
+        publicPath: config.output.publicPath,
     });
+
+    new WebpackDevServer(compiler, devServerConfig)
+        .listen(8080, "localhost", function (err) {
+            if (err) throw new gutil.PluginError("webpack-dev-server", err);
+            // Server listening
+            gutil.log("[webpack-dev-server]", "http://localhost:8080/webpack-dev-server/backend");
+            callback();
+        });
 });
 
 gulp.task('watch', function (callback) {

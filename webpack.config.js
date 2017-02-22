@@ -18,5 +18,15 @@ module.exports = Object.assign({}, baseConfig, {
     ],
     output: Object.assign({}, baseConfig.output, {
         filename: '[name]/[name].js',
-    })
+        publicPath: '/assets/',
+    }),
+    devServer: {
+        proxy: {
+            '/backend': {
+                target: 'http://localhost:8000',
+                pathRewrite: {"^/backend": ""}
+            }
+        },
+        publicPath: '/assets/',
+    }
 });

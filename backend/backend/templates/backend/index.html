@@ -14,10 +14,18 @@
     <script src="http://localhost:8080/webpack-dev-server.js"></script>
     <script src="http://localhost:8080/assets/{{ webpackAssets.vendor.js }}"></script>
     <script src="http://localhost:8080/assets/{{ webpackAssets.app.js }}"></script>
+
+    {% if webpackAssets.vendor.css %}
+        <link rel="stylesheet" href="{{ webpackAssets.vendor.css }}" />
+    {% endif %}
     <link rel="stylesheet" href="http://localhost:8080/assets/{{ webpackAssets.app.css }}" />
 {% else %}
     <script src="{{ assets.vendor.js }}"></script>
     <script src="{{ assets.app.js }}"></script>
+
+    {% if assets.vendor.css %}
+        <link rel="stylesheet" href="{{ assets.vendor.css }}" />
+    {% endif %}
     <link rel="stylesheet" href="{{ assets.app.css }}" />
 {% endif %}
 </body>
