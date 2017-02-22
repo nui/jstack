@@ -12,12 +12,18 @@ gulp.task('webpack-dev-server', function (callback) {
     var compiler = webpack(config);
 
     new WebpackDevServer(compiler, {
-        stats: config.stats
+        stats: config.stats,
+        proxy: {
+            '/backend': {
+                target: 'http://localhost:8000',
+                pathRewrite: {"^/backend": ""}
+            }
+        }
         // server and middleware options
     }).listen(8080, "localhost", function (err) {
         if (err) throw new gutil.PluginError("webpack-dev-server", err);
         // Server listening
-        gutil.log("[webpack-dev-server]", "http://localhost:8080/webpack-dev-server/index.html");
+        gutil.log("[webpack-dev-server]", "http://localhost:8080/webpack-dev-server/backend");
         callback();
     });
 });

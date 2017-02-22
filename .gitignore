@@ -3,3 +3,5 @@ node_modules/
 .idea/
 
 npm-debug.log
+db.sqlite3
+__pycache__
