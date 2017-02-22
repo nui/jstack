@@ -41,6 +41,6 @@ gulp.task('bundle', function (callback) {
 
 gulp.task('clean', function () {
     return del([
-        'dist/**/*'
+        'assets/**/*'
     ]);
 });

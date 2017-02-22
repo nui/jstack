@@ -11,14 +11,11 @@ module.exports = Object.assign({}, baseConfig, {
     plugins: [
         new AssetsPlugin({
             fullPath: false,
-            path: path.join(__dirname, 'dist'),
+            path: path.join(__dirname, 'assets'),
             prettyPrint: true
         }),
-        new ExtractTextPlugin({filename: "[name]-[chunkhash].css"}),
-        new webpack.optimize.CommonsChunkPlugin({
-            filename: "vendor-[chunkhash].js",
-            name: "vendor",
-        }),
+        new ExtractTextPlugin({filename: "[name]/[name].[chunkhash].min.css"}),
+        new webpack.optimize.CommonsChunkPlugin({name: "vendor"}),
 
         new OptimizeCssAssetsPlugin(),
         new webpack.optimize.UglifyJsPlugin({sourceMap: true}),
@@ -37,6 +34,6 @@ module.exports = Object.assign({}, baseConfig, {
         // })
     ],
     output: Object.assign({}, baseConfig.output, {
-        filename: '[name]-[chunkhash].js',
+        filename: '[name]/[name].[chunkhash].min.js',
     })
 });

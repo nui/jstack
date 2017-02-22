@@ -10,16 +10,13 @@ module.exports = Object.assign({}, baseConfig, {
     plugins: [
         new AssetsPlugin({
             fullPath: false,
-            path: path.join(__dirname, 'dist'),
+            path: path.join(__dirname, 'assets'),
             prettyPrint: true
         }),
-        new ExtractTextPlugin({filename: "[name].css"}),
-        new webpack.optimize.CommonsChunkPlugin({
-            filename: "vendor.js",
-            name: "vendor"
-        }),
+        new ExtractTextPlugin({filename: "[name]/[name].css"}),
+        new webpack.optimize.CommonsChunkPlugin({name: "vendor"}),
     ],
     output: Object.assign({}, baseConfig.output, {
-        filename: '[name].js',
+        filename: '[name]/[name].js',
     })
 });
