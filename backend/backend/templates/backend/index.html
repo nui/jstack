@@ -16,7 +16,7 @@
     <script src="http://localhost:8080/assets/{{ webpackAssets.app.js }}"></script>
 
     {% if webpackAssets.vendor.css %}
-        <link rel="stylesheet" href="{{ webpackAssets.vendor.css }}" />
+        <link rel="stylesheet" href="http://localhost:8080/assets/{{ webpackAssets.vendor.css }}" />
     {% endif %}
     <link rel="stylesheet" href="http://localhost:8080/assets/{{ webpackAssets.app.css }}" />
 {% else %}

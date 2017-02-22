@@ -18,11 +18,13 @@ module.exports = {
             },
             {
                 test: /\.less$/,
-                use: [
-                    'style-loader',
-                    { loader: 'css-loader', options: { importLoaders: 1 } },
-                    'less-loader'
-                ]
+                use: ExtractTextPlugin.extract({
+                    fallback: 'style-loader',
+                    use: [
+                        { loader: 'css-loader', options: { importLoaders: 1 } },
+                        'less-loader'
+                    ]
+                })
             },
             {
                 test: /\.(eot|woff|woff2|ttf|svg|png|jpg)$/,
@@ -39,6 +41,7 @@ module.exports = {
     },
     stats: {
         colors: true,
-        chunks: false
+        chunks: false,
+        children: false
     }
 };
