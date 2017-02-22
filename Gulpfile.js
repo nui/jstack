@@ -18,7 +18,8 @@ gulp.task('webpack-dev-server', function (callback) {
                 target: 'http://localhost:8000',
                 pathRewrite: {"^/backend": ""}
             }
-        }
+        },
+        publicPath: '/assets'
         // server and middleware options
     }).listen(8080, "localhost", function (err) {
         if (err) throw new gutil.PluginError("webpack-dev-server", err);
