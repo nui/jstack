@@ -27,7 +27,7 @@ gulp.task('webpack-dev-server', function (callback) {
         });
 });
 
-gulp.task('watch', function (callback) {
+gulp.task('watch', ['clean'], function (callback) {
     var config = require('./webpack.config');
     webpack(config).watch({}, function (err, stats) {
         if (err) throw new gutil.PluginError("webpack", err);
