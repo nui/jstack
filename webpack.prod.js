@@ -17,7 +17,7 @@ module.exports = Object.assign({}, baseConfig, {
         new ExtractTextPlugin({filename: "[name]/[name].[chunkhash].min.css"}),
         new webpack.optimize.CommonsChunkPlugin({name: "vendor"}),
 
-        new OptimizeCssAssetsPlugin(),
+        new OptimizeCssAssetsPlugin({canPrint: false}),
         new webpack.optimize.UglifyJsPlugin({sourceMap: true}),
 
         // See https://facebook.github.io/react/docs/optimizing-performance.html#use-the-production-build

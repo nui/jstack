@@ -27,21 +27,27 @@ gulp.task('webpack-dev-server', function (callback) {
         });
 });
 
-gulp.task('watch', ['clean'], function (callback) {
-    var config = require('./webpack.config');
-    webpack(config).watch({}, function (err, stats) {
+function webpackCallback(config, callback) {
+    return function (err, stats) {
         if (err) throw new gutil.PluginError("webpack", err);
         gutil.log("[webpack]", stats.toString(config.stats));
-    });
+        if (callback) callback();
+    }
+}
+
+gulp.task('watch', ['clean'], function (callback) {
+    var config = require('./webpack.config');
+    webpack(config).watch({}, webpackCallback(config));
 });
 
 gulp.task('bundle', function (callback) {
     var config = require('./webpack.prod');
-    webpack(config, function (err, stats) {
-        if (err) throw new gutil.PluginError("webpack", err);
-        gutil.log("[webpack]", stats.toString(config.stats));
-        callback();
-    });
+    webpack(config, webpackCallback(config, callback));
+});
+
+gulp.task('bundle-watch', ['clean'], function(callback) {
+    var config = require('./webpack.prod');
+    webpack(config).watch({}, webpackCallback(config));
 });
 
 gulp.task('clean', function () {
