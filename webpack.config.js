@@ -14,7 +14,7 @@ module.exports = Object.assign({}, baseConfig, {
             prettyPrint: true
         }),
         new ExtractTextPlugin({filename: "[name]/[name].css"}),
-        new webpack.optimize.CommonsChunkPlugin({name: "vendor"}),
+        new webpack.optimize.CommonsChunkPlugin({name: "commons"}),
     ],
     output: Object.assign({}, baseConfig.output, {
         filename: '[name]/[name].js',

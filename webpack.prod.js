@@ -15,7 +15,7 @@ module.exports = Object.assign({}, baseConfig, {
             prettyPrint: true
         }),
         new ExtractTextPlugin({filename: "[name]/[name].[chunkhash].min.css"}),
-        new webpack.optimize.CommonsChunkPlugin({name: "vendor"}),
+        new webpack.optimize.CommonsChunkPlugin({name: "commons"}),
 
         new OptimizeCssAssetsPlugin({canPrint: false}),
         new webpack.optimize.UglifyJsPlugin({sourceMap: true}),
