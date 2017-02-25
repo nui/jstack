@@ -30,7 +30,7 @@ module.exports = {
                 test: /\.(eot|woff|woff2|ttf|svg|png|jpg)$/,
                 use: {
                     loader: 'url-loader',
-                    options: {limit: 32 * 1024, name: 'assets/[hash:base64].[ext]'}
+                    options: {limit: 32 * 1024, name: 'files/[hash:base64].[ext]'}
                 }
             }
         ]

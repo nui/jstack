@@ -27,7 +27,7 @@ gulp.task('webpack-dev-server', function (callback) {
         });
 });
 
-function webpackCallback(config, callback) {
+function logStats(config, callback) {
     return function (err, stats) {
         if (err) throw new gutil.PluginError("webpack", err);
         gutil.log("[webpack]", stats.toString(config.stats));
@@ -37,17 +37,17 @@ function webpackCallback(config, callback) {
 
 gulp.task('watch', ['clean'], function (callback) {
     var config = require('./webpack.config');
-    webpack(config).watch({}, webpackCallback(config));
+    webpack(config).watch({}, logStats(config));
 });
 
 gulp.task('bundle', function (callback) {
     var config = require('./webpack.prod');
-    webpack(config, webpackCallback(config, callback));
+    webpack(config, logStats(config, callback));
 });
 
 gulp.task('bundle-watch', ['clean'], function(callback) {
     var config = require('./webpack.prod');
-    webpack(config).watch({}, webpackCallback(config));
+    webpack(config).watch({}, logStats(config));
 });
 
 gulp.task('clean', function () {
