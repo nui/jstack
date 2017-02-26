@@ -7,7 +7,6 @@ var webpack = require('webpack');
 var baseConfig = require('./webpack.base');
 
 module.exports = Object.assign({}, baseConfig, {
-    devtool: 'source-map',
     plugins: [
         new AssetsPlugin({
             fullPath: false,
@@ -25,6 +24,14 @@ module.exports = Object.assign({}, baseConfig, {
             'process.env': {
                 NODE_ENV: JSON.stringify('production')
             }
+        }),
+
+        new webpack.SourceMapDevToolPlugin({
+            filename: '[file].map[query]',
+            exclude: /\.css$/,
+            // uncomment following line
+            // then we can serve sourcemap from private location
+            // append: '\n//# sourceMappingURL=http://localhost:8888/[url]'
         }),
 
         // https://webpack.js.org/plugins/provide-plugin/
