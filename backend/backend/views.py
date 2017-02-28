@@ -9,7 +9,7 @@ from django.template import loader
 
 
 def load_webpack_assets():
-    return json.loads(open(settings.WEBPACK_ASSETS_JSON).read())
+    return json.loads(open(str(settings.WEBPACK_ASSETS_JSON)).read())
 
 
 def is_devserver_running():
