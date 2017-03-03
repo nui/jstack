@@ -32,7 +32,7 @@ module.exports = function (env) {
         Array.prototype.push.apply(plugins, [
             // See https://facebook.github.io/react/docs/optimizing-performance.html#use-the-production-build
             new webpack.DefinePlugin({'process.env': {NODE_ENV: JSON.stringify('production')}}),
-            new OptimizeCssAssetsPlugin({canPrint: false}),
+            new OptimizeCssAssetsPlugin({canPrint: false, cssProcessorOptions: {discardComments: {removeAll: true}}}),
             new webpack.optimize.UglifyJsPlugin({comments: false, sourceMap: true}),
         ]);
     }
