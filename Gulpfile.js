@@ -4,18 +4,20 @@ var gutil = require('gulp-util');
 var webpack = require('webpack');
 var WebpackDevServer = require('webpack-dev-server');
 
+var development = require('./webpack.config')({production: false});
+var production = require('./webpack.config')({production: true});
+
 gulp.task('default', ['webpack-dev-server']);
 gulp.task('start', ['webpack-dev-server']);
 
 gulp.task('webpack-dev-server', function (callback) {
-    var config = require('./webpack.config');
-    var compiler = webpack(config);
+    var compiler = webpack(development);
 
     // server and middleware options
     var devServerConfig = Object.assign({}, {
-        stats: config.stats,
-        proxy: config.devServer.proxy,
-        publicPath: config.output.publicPath,
+        stats: development.stats,
+        proxy: development.devServer.proxy,
+        publicPath: development.output.publicPath,
     });
 
     new WebpackDevServer(compiler, devServerConfig)
@@ -36,18 +38,15 @@ function logStats(config, callback) {
 }
 
 gulp.task('watch', ['clean'], function (callback) {
-    var config = require('./webpack.config');
-    webpack(config).watch({}, logStats(config));
+    webpack(development).watch({}, logStats(development));
 });
 
 gulp.task('bundle', function (callback) {
-    var config = require('./webpack.prod');
-    webpack(config, logStats(config, callback));
+    webpack(production, logStats(production, callback));
 });
 
 gulp.task('bundle-watch', ['clean'], function(callback) {
-    var config = require('./webpack.prod');
-    webpack(config).watch({}, logStats(config));
+    webpack(production).watch({}, logStats(production));
 });
 
 gulp.task('clean', function () {
