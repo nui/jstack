@@ -33,7 +33,7 @@ module.exports = function (env) {
             // See https://facebook.github.io/react/docs/optimizing-performance.html#use-the-production-build
             new webpack.DefinePlugin({'process.env': {NODE_ENV: JSON.stringify('production')}}),
             new OptimizeCssAssetsPlugin({canPrint: false}),
-            new webpack.optimize.UglifyJsPlugin({sourceMap: true}),
+            new webpack.optimize.UglifyJsPlugin({comments: false, sourceMap: true}),
         ]);
     }
 
