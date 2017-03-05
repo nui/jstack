@@ -15,13 +15,6 @@ module.exports = function (env) {
         }),
         new ExtractTextPlugin({filename: stem + ".css"}),
         new webpack.optimize.CommonsChunkPlugin({name: "commons"}),
-        new webpack.SourceMapDevToolPlugin({
-            filename: env.production ? '[file].map[query]' : undefined,
-            exclude: /\.css$/,
-            // uncomment following line
-            // then we can serve sourcemap from private location
-            // append: '\n//# sourceMappingURL=http://localhost:8888/[url]'
-        }),
         // https://webpack.js.org/plugins/provide-plugin/
         // new webpack.ProvidePlugin({
         //     $: 'jquery',
@@ -34,10 +27,18 @@ module.exports = function (env) {
             new webpack.DefinePlugin({'process.env': {NODE_ENV: JSON.stringify('production')}}),
             new OptimizeCssAssetsPlugin({canPrint: false, cssProcessorOptions: {discardComments: {removeAll: true}}}),
             new webpack.optimize.UglifyJsPlugin({comments: false, sourceMap: true}),
+            new webpack.SourceMapDevToolPlugin({
+                filename: '[file].map[query]',
+                exclude: /\.css$/,
+                // uncomment following line
+                // then we can serve sourcemap from private location
+                // append: '\n//# sourceMappingURL=http://localhost:8888/[url]'
+            }),
         ]);
     }
 
     return {
+        devtool: env.production ? undefined : 'cheap-module-eval-source-map',
         entry: {
             app: './components/App/App.tsx',
             app2: './components/App2/App2.tsx',
