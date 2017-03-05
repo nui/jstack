@@ -11,39 +11,10 @@ var webpack = require('webpack');
 
 
 module.exports = function (env) {
-    var stem = env.production ? '[name]/[name].[chunkhash].min' : '[name]/[name]';
-    var plugins = [
-        new AssetsPlugin({
-            fullPath: false,
-            path: path.join(__dirname, 'assets'),
-            prettyPrint: true
-        }),
-        new ExtractTextPlugin({filename: stem + ".css"}),
-        new CommonsChunkPlugin({name: "commons"}),
-        // https://webpack.js.org/plugins/provide-plugin/
-        new ProvidePlugin({
-            $: 'jquery',
-            jQuery: 'jquery'
-        }),
-    ];
-    if (env.production) {
-        Array.prototype.push.apply(plugins, [
-            // See https://facebook.github.io/react/docs/optimizing-performance.html#use-the-production-build
-            new DefinePlugin({'process.env': {NODE_ENV: JSON.stringify('production')}}),
-            new OptimizeCssAssetsPlugin({canPrint: false, cssProcessorOptions: {discardComments: {removeAll: true}}}),
-            new UglifyJsPlugin({comments: false, sourceMap: true}),
-            new SourceMapDevToolPlugin({
-                filename: '[file].map[query]',
-                exclude: /\.css$/i,
-                // uncomment following line
-                // then we can serve sourcemap from private location
-                // append: '\n//# sourceMappingURL=http://localhost:8888/[url]'
-            }),
-        ]);
-    }
-
+    var production = env.production;
+    var stem = production ? '[name]/[name].[chunkhash].min' : '[name]/[name]';
     return {
-        devtool: !env.production ? 'cheap-module-eval-source-map' : undefined,
+        devtool: production ? undefined : 'cheap-module-eval-source-map',
         entry: {
             app: './components/App/App.tsx',
             app2: './components/App2/App2.tsx',
@@ -74,13 +45,13 @@ module.exports = function (env) {
                         loader: 'url-loader',
                         options: {
                             limit: 32 * 1024,
-                            name: 'files/' + (env.production ? '[hash:base64]' : '[name]') + '.[ext]'
+                            name: 'files/' + (production ? '[hash:base64]' : '[name]') + '.[ext]'
                         }
                     }
                 }
             ]
         },
-        plugins: plugins,
+        plugins: getPlugins(production, stem),
         resolve: {
             extensions: ['.css', '.js', '.less', '.ts', '.tsx']
         },
@@ -90,9 +61,9 @@ module.exports = function (env) {
             publicPath: "/assets/"
         },
         stats: {
-            colors: true,
+            children: false,
             chunks: false,
-            children: false
+            colors: true,
         },
         devServer: {
             proxy: {
@@ -105,3 +76,35 @@ module.exports = function (env) {
         }
     };
 };
+
+function getPlugins(production, stem) {
+    var plugins = [
+        new AssetsPlugin({
+            fullPath: false,
+            path: path.join(__dirname, 'assets'),
+            prettyPrint: true
+        }),
+        new ExtractTextPlugin({filename: stem + ".css"}),
+        new CommonsChunkPlugin({name: "commons"}),
+        // https://webpack.js.org/plugins/provide-plugin/
+        new ProvidePlugin({
+            $: 'jquery',
+            jQuery: 'jquery'
+        }),
+    ];
+    if (production) {
+        Array.prototype.push.apply(plugins, [
+            // See https://facebook.github.io/react/docs/optimizing-performance.html#use-the-production-build
+            new DefinePlugin({'process.env': {NODE_ENV: JSON.stringify('production')}}),
+            new OptimizeCssAssetsPlugin({canPrint: false, cssProcessorOptions: {discardComments: {removeAll: true}}}),
+            new UglifyJsPlugin({comments: false, sourceMap: true}),
+            new SourceMapDevToolPlugin({
+                filename: '[file].map[query]',
+                exclude: /\.css$/i,
+                // uncomment following line
+                // then we can serve sourcemap from private location
+                // append: '\n//# sourceMappingURL=http://localhost:8888/[url]'
+            }),
+        ]);
+    }
+}
