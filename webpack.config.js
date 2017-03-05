@@ -4,6 +4,7 @@ var DefinePlugin = require('webpack').DefinePlugin;
 var ExtractTextPlugin = require("extract-text-webpack-plugin");
 var OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 var path = require('path');
+var ProvidePlugin = require('webpack').ProvidePlugin;
 var SourceMapDevToolPlugin = require('webpack').SourceMapDevToolPlugin;
 var UglifyJsPlugin = require('webpack').optimize.UglifyJsPlugin;
 var webpack = require('webpack');
@@ -20,10 +21,10 @@ module.exports = function (env) {
         new ExtractTextPlugin({filename: stem + ".css"}),
         new CommonsChunkPlugin({name: "commons"}),
         // https://webpack.js.org/plugins/provide-plugin/
-        // new webpack.ProvidePlugin({
-        //     $: 'jquery',
-        //     jQuery: 'jquery'
-        // }),
+        new ProvidePlugin({
+            $: 'jquery',
+            jQuery: 'jquery'
+        }),
     ];
     if (env.production) {
         Array.prototype.push.apply(plugins, [
