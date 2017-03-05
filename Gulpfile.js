@@ -1,6 +1,9 @@
 var del = require('del');
+var flatten = require('gulp-flatten');
 var gulp = require('gulp');
 var gutil = require('gulp-util');
+var runSequence = require('run-sequence');
+var vinylPaths = require('vinyl-paths');
 var webpack = require('webpack');
 var WebpackDevServer = require('webpack-dev-server');
 
@@ -37,7 +40,7 @@ function logStats(config, callback) {
     }
 }
 
-gulp.task('watch', ['clean'], function (callback) {
+gulp.task('watch', ['clean'], function () {
     webpack(development).watch({}, logStats(development));
 });
 
@@ -45,12 +48,27 @@ gulp.task('bundle', function (callback) {
     webpack(production, logStats(production, callback));
 });
 
-gulp.task('bundle-watch', ['clean'], function(callback) {
+gulp.task('bundle-watch', ['clean'], function () {
     webpack(production).watch({}, logStats(production));
+});
+
+gulp.task('bundle-ci', function (callback) {
+    runSequence('clean',
+        'bundle',
+        'move-sourcemap',
+        callback);
+});
+
+gulp.task('move-sourcemap', function () {
+    return gulp.src('./assets/**/*.map')
+        .pipe(vinylPaths(del))
+        .pipe(flatten())
+        .pipe(gulp.dest('./sourcemaps'));
 });
 
 gulp.task('clean', function () {
     return del([
-        'assets/**/*'
+        'assets/**/*',
+        'sourcemaps/*',
     ]);
 });

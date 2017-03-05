@@ -107,4 +107,5 @@ function getPlugins(production, stem) {
             }),
         ]);
     }
+    return plugins;
 }
