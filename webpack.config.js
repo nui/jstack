@@ -43,7 +43,7 @@ module.exports = function (env) {
     }
 
     return {
-        devtool: env.production ? undefined : 'cheap-module-eval-source-map',
+        devtool: !env.production ? 'cheap-module-eval-source-map' : undefined,
         entry: {
             app: './components/App/App.tsx',
             app2: './components/App2/App2.tsx',

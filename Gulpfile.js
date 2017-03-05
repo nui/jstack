@@ -14,13 +14,13 @@ gulp.task('webpack-dev-server', function (callback) {
     var compiler = webpack(development);
 
     // server and middleware options
-    var devServerConfig = Object.assign({}, {
+    var config = Object.assign({}, {
         stats: development.stats,
         proxy: development.devServer.proxy,
         publicPath: development.output.publicPath,
     });
 
-    new WebpackDevServer(compiler, devServerConfig)
+    new WebpackDevServer(compiler, config)
         .listen(8080, "localhost", function (err) {
             if (err) throw new gutil.PluginError("webpack-dev-server", err);
             // Server listening
