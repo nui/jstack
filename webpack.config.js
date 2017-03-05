@@ -1,7 +1,11 @@
 var AssetsPlugin = require('assets-webpack-plugin');
+var CommonsChunkPlugin = require('webpack').optimize.CommonsChunkPlugin;
+var DefinePlugin = require('webpack').DefinePlugin;
 var ExtractTextPlugin = require("extract-text-webpack-plugin");
 var OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 var path = require('path');
+var SourceMapDevToolPlugin = require('webpack').SourceMapDevToolPlugin;
+var UglifyJsPlugin = require('webpack').optimize.UglifyJsPlugin;
 var webpack = require('webpack');
 
 
@@ -14,7 +18,7 @@ module.exports = function (env) {
             prettyPrint: true
         }),
         new ExtractTextPlugin({filename: stem + ".css"}),
-        new webpack.optimize.CommonsChunkPlugin({name: "commons"}),
+        new CommonsChunkPlugin({name: "commons"}),
         // https://webpack.js.org/plugins/provide-plugin/
         // new webpack.ProvidePlugin({
         //     $: 'jquery',
@@ -24,12 +28,12 @@ module.exports = function (env) {
     if (env.production) {
         Array.prototype.push.apply(plugins, [
             // See https://facebook.github.io/react/docs/optimizing-performance.html#use-the-production-build
-            new webpack.DefinePlugin({'process.env': {NODE_ENV: JSON.stringify('production')}}),
+            new DefinePlugin({'process.env': {NODE_ENV: JSON.stringify('production')}}),
             new OptimizeCssAssetsPlugin({canPrint: false, cssProcessorOptions: {discardComments: {removeAll: true}}}),
-            new webpack.optimize.UglifyJsPlugin({comments: false, sourceMap: true}),
-            new webpack.SourceMapDevToolPlugin({
+            new UglifyJsPlugin({comments: false, sourceMap: true}),
+            new SourceMapDevToolPlugin({
                 filename: '[file].map[query]',
-                exclude: /\.css$/,
+                exclude: /\.css$/i,
                 // uncomment following line
                 // then we can serve sourcemap from private location
                 // append: '\n//# sourceMappingURL=http://localhost:8888/[url]'
