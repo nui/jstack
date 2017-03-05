@@ -49,16 +49,16 @@ module.exports = function (env) {
         },
         module: {
             rules: [
-                {test: /\.tsx?$/, loader: 'ts-loader'},
+                {test: /\.tsx?$/i, loader: 'ts-loader'},
                 {
-                    test: /\.css$/,
+                    test: /\.css$/i,
                     use: ExtractTextPlugin.extract({
                         fallback: 'style-loader',
                         use: {loader: "css-loader", options: {modules: true}}
                     })
                 },
                 {
-                    test: /\.less$/,
+                    test: /\.less$/i,
                     use: ExtractTextPlugin.extract({
                         fallback: 'style-loader',
                         use: [
@@ -68,7 +68,7 @@ module.exports = function (env) {
                     })
                 },
                 {
-                    test: /\.(eot|woff|woff2|ttf|svg|png|jpg)$/,
+                    test: /\.(eot|woff|woff2|ttf|svg|png|jpg)$/i,
                     use: {
                         loader: 'url-loader',
                         options: {
