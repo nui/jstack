@@ -1,12 +1,12 @@
 var AssetsPlugin = require('assets-webpack-plugin');
-var CommonsChunkPlugin = require('webpack').optimize.CommonsChunkPlugin;
-var DefinePlugin = require('webpack').DefinePlugin;
+var CommonsChunkPlugin = require('webpack/lib/optimize/CommonsChunkPlugin');
+var DefinePlugin = require('webpack/lib/DefinePlugin');
 var ExtractTextPlugin = require("extract-text-webpack-plugin");
 var OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 var path = require('path');
-var ProvidePlugin = require('webpack').ProvidePlugin;
-var SourceMapDevToolPlugin = require('webpack').SourceMapDevToolPlugin;
-var UglifyJsPlugin = require('webpack').optimize.UglifyJsPlugin;
+var ProvidePlugin = require('webpack/lib/ProvidePlugin');
+var SourceMapDevToolPlugin = require('webpack/lib/SourceMapDevToolPlugin');
+var UglifyJsPlugin = require('webpack/lib/optimize/UglifyJsPlugin');
 var webpack = require('webpack');
 
 
