@@ -9,6 +9,8 @@ var SourceMapDevToolPlugin = require('webpack/lib/SourceMapDevToolPlugin');
 var UglifyJsPlugin = require('webpack/lib/optimize/UglifyJsPlugin');
 var webpack = require('webpack');
 
+var MyPlugin = require('./plugins/MyPlugin');
+
 
 module.exports = function (env) {
     var production = env.production;
@@ -91,6 +93,8 @@ function getPlugins(production, stem) {
             $: 'jquery',
             jQuery: 'jquery'
         }),
+        // This is test plugin, don't include it
+        new MyPlugin({log: false}),
     ];
     if (production) {
         Array.prototype.push.apply(plugins, [
