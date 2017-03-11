@@ -14,7 +14,7 @@ var MyPlugin = require('./plugins/MyPlugin');
 
 module.exports = function (env) {
     var production = env.production;
-    var stem = production ? '[name]/[name].[chunkhash].min' : '[name]/[name]';
+    var stem = production ? '[name].[chunkhash].min' : '[name]';
     return {
         devtool: production ? undefined : 'cheap-module-eval-source-map',
         entry: {
@@ -47,7 +47,7 @@ module.exports = function (env) {
                         loader: 'url-loader',
                         options: {
                             limit: 32 * 1024,
-                            name: 'files/' + (production ? '[hash:base64]' : '[name]') + '.[ext]'
+                            name: (production ? '[hash:base64]' : '[name]') + '.[ext]'
                         }
                     }
                 }
