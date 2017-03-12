@@ -45,7 +45,7 @@ gulp.task('watch', ['clean'], function () {
 });
 
 gulp.task('bundle', function (callback) {
-    webpack(production, logStats(production, callback));
+    webpack(production).run(logStats(production, callback));
 });
 
 gulp.task('bundle-watch', ['clean'], function () {
