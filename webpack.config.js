@@ -94,7 +94,7 @@ function getPlugins(production, stem) {
             jQuery: 'jquery'
         }),
         // This is test plugin, don't include it
-        new MyPlugin({log: false}),
+        // new MyPlugin({log: false}),
     ];
     if (production) {
         Array.prototype.push.apply(plugins, [
