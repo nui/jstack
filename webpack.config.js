@@ -10,6 +10,7 @@ var UglifyJsPlugin = require('webpack/lib/optimize/UglifyJsPlugin');
 var webpack = require('webpack');
 
 var MyPlugin = require('./plugins/MyPlugin');
+var ExperimentPlugin = require('./plugins/ExperimentPlugin');
 
 
 module.exports = function (env) {
@@ -20,6 +21,7 @@ module.exports = function (env) {
         entry: {
             app: './components/App/App.tsx',
             app2: './components/App2/App2.tsx',
+            test: './components/Test/entry',
         },
         module: {
             rules: [
@@ -95,6 +97,7 @@ function getPlugins(production, stem) {
         }),
         // This is test plugin, don't include it
         // new MyPlugin({log: false}),
+        // new ExperimentPlugin(),
     ];
     if (production) {
         Array.prototype.push.apply(plugins, [
