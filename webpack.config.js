@@ -1,21 +1,23 @@
-var AssetsPlugin = require('assets-webpack-plugin');
-var CommonsChunkPlugin = require('webpack/lib/optimize/CommonsChunkPlugin');
-var DefinePlugin = require('webpack/lib/DefinePlugin');
-var ExtractTextPlugin = require("extract-text-webpack-plugin");
-var OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
-var path = require('path');
-var ProvidePlugin = require('webpack/lib/ProvidePlugin');
-var SourceMapDevToolPlugin = require('webpack/lib/SourceMapDevToolPlugin');
-var UglifyJsPlugin = require('webpack/lib/optimize/UglifyJsPlugin');
-var webpack = require('webpack');
+let AssetsPlugin = require('assets-webpack-plugin');
+let CommonsChunkPlugin = require('webpack').optimize.CommonsChunkPlugin;
+let DefinePlugin = require('webpack').DefinePlugin;
+let ExtractTextPlugin = require("extract-text-webpack-plugin");
+let OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
+let path = require('path');
+let ProvidePlugin = require('webpack').ProvidePlugin;
+let SourceMapDevToolPlugin = require('webpack').SourceMapDevToolPlugin;
+let UglifyJsPlugin = require('webpack').optimize.UglifyJsPlugin;
+let webpack = require('webpack');
 
-var MyPlugin = require('./plugins/MyPlugin');
-var ExperimentPlugin = require('./plugins/ExperimentPlugin');
+let MyPlugin = require('./plugins/MyPlugin');
+let ExperimentPlugin = require('./plugins/ExperimentPlugin');
 
 
 module.exports = function (env) {
-    var production = env.production;
-    var stem = production ? '[name].[chunkhash].min' : '[name]';
+    env = env || {production: false};
+    let production = env.production === true;
+
+    let stem = production ? '[name].[chunkhash].min' : '[name]';
     return {
         devtool: production ? undefined : 'cheap-module-eval-source-map',
         entry: {
@@ -82,7 +84,7 @@ module.exports = function (env) {
 };
 
 function getPlugins(production, stem) {
-    var plugins = [
+    let plugins = [
         new AssetsPlugin({
             fullPath: false,
             path: path.join(__dirname, 'assets'),
