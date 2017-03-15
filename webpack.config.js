@@ -14,6 +14,8 @@ let ExperimentPlugin = require('./plugins/ExperimentPlugin');
 
 
 module.exports = function (env) {
+    // if webpack not invoke with --env.production
+    // default to development environment
     env = env || {production: false};
     let production = env.production === true;
 
