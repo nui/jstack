@@ -26,6 +26,7 @@ module.exports = function (env) {
             app: './components/App/App.tsx',
             app2: './components/App2/App2.tsx',
             test: './components/Test/entry',
+            vendor: ['react', 'react-bootstrap'],
         },
         module: {
             rules: [
@@ -93,7 +94,7 @@ function getPlugins(production, stem) {
             prettyPrint: true
         }),
         new ExtractTextPlugin({filename: stem + ".css"}),
-        new CommonsChunkPlugin({name: "commons"}),
+        new CommonsChunkPlugin({names: ["vendor", "manifest"]}),
         // https://webpack.js.org/plugins/provide-plugin/
         new ProvidePlugin({
             $: 'jquery',
