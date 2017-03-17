@@ -3,7 +3,7 @@ import * as ReactDOM from "react-dom";
 import {Button, ButtonToolbar, DropdownButton, MenuItem} from "react-bootstrap";
 import {ExperimentButton} from "../ExperimentButton/ExperimentButton";
 
-import "bootstrap/less/bootstrap";
+// import "bootstrap/less/bootstrap";
 
 ReactDOM.render(
     <div>
