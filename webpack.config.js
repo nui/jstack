@@ -109,7 +109,7 @@ function getPlugins(production, stem) {
             // See https://facebook.github.io/react/docs/optimizing-performance.html#use-the-production-build
             new DefinePlugin({'process.env': {NODE_ENV: JSON.stringify('production')}}),
             new OptimizeCssAssetsPlugin({canPrint: false, cssProcessorOptions: {discardComments: {removeAll: true}}}),
-            new UglifyJsPlugin({comments: false, sourceMap: true}),
+            new UglifyJsPlugin({extractComments: true, sourceMap: true}),
             new SourceMapDevToolPlugin({
                 filename: '[file].map[query]',
                 exclude: /\.css$/i,
