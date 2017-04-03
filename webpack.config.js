@@ -26,7 +26,6 @@ module.exports = function (env) {
             app: './components/App/App.tsx',
             app2: './components/App2/App2.tsx',
             test: './components/Test/entry',
-            vendor: ['react', 'react-bootstrap'],
         },
         module: {
             rules: [
@@ -94,7 +93,9 @@ function getPlugins(production, stem) {
             prettyPrint: true
         }),
         new ExtractTextPlugin({filename: stem + ".css"}),
-        new CommonsChunkPlugin({names: ["vendor", "manifest"]}),
+        // DON'T SWAP THESE 2 BELOW LINES, The order of CommonsChunkPlugin is important
+        new CommonsChunkPlugin({name: "commons", minChunks: 2}), // minChunks set to 2 to see effect of plugin in this setup only
+        new CommonsChunkPlugin({name: "manifest", minChunks: Infinity}),
         // https://webpack.js.org/plugins/provide-plugin/
         new ProvidePlugin({
             $: 'jquery',
