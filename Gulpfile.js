@@ -76,7 +76,8 @@ gulp.task('clean', function () {
 gulp.task('webpack-benchmark', function (callback) {
     const timesSeries = require('async/timesSeries');
     const MemoryFs = require('memory-fs');
-    const n = 10;
+    const argv = require('yargs').argv;
+    const n = typeof argv.n === 'number' ? argv.n : 5;
     timesSeries(n, function (n, next) {
         let compiler = webpack(production);
         compiler.outputFileSystem = new MemoryFs();
@@ -86,7 +87,7 @@ gulp.task('webpack-benchmark', function (callback) {
         });
     }, function (err, times) {
         if (err) throw new gutil.PluginError("webpack", err);
-        let sum = times.reduce(function(acc, val) {
+        let sum = times.reduce(function (acc, val) {
             return acc + val;
         }, 0);
         gutil.log(times);
