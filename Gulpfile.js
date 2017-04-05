@@ -72,3 +72,25 @@ gulp.task('clean', function () {
         'sourcemaps/*',
     ]);
 });
+
+gulp.task('webpack-benchmark', function (callback) {
+    const timesSeries = require('async/timesSeries');
+    const MemoryFs = require('memory-fs');
+    const n = 10;
+    timesSeries(n, function (n, next) {
+        let compiler = webpack(production);
+        compiler.outputFileSystem = new MemoryFs();
+        compiler.run(function (err, stats) {
+            if (err) return next(err);
+            next(null, stats.endTime - stats.startTime);
+        });
+    }, function (err, times) {
+        if (err) throw new gutil.PluginError("webpack", err);
+        let sum = times.reduce(function(acc, val) {
+            return acc + val;
+        }, 0);
+        gutil.log(times);
+        gutil.log('Average time:', sum / 1000 / times.length, 's.');
+        callback();
+    });
+});
