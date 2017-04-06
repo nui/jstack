@@ -77,7 +77,7 @@ gulp.task('webpack-benchmark', function (callback) {
     const timesSeries = require('async/timesSeries');
     const MemoryFs = require('memory-fs');
     const argv = require('yargs').argv;
-    const n = typeof argv.n === 'number' ? argv.n : 5;
+    const n = typeof argv.n === 'number' ? argv.n : 10;
     timesSeries(n, function (n, next) {
         let compiler = webpack(production);
         compiler.outputFileSystem = new MemoryFs();
