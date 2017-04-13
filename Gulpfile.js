@@ -1,23 +1,26 @@
-var del = require('del');
-var flatten = require('gulp-flatten');
-var gulp = require('gulp');
-var gutil = require('gulp-util');
-var runSequence = require('run-sequence');
-var vinylPaths = require('vinyl-paths');
-var webpack = require('webpack');
-var WebpackDevServer = require('webpack-dev-server');
+const exec = require('child_process').exec;
 
-var development = require('./webpack.config')({production: false});
-var production = require('./webpack.config')({production: true});
+const del = require('del');
+const flatten = require('gulp-flatten');
+const gulp = require('gulp');
+const gutil = require('gulp-util');
+const MemoryFs = require('memory-fs');
+const runSequence = require('run-sequence');
+const vinylPaths = require('vinyl-paths');
+const webpack = require('webpack');
+const WebpackDevServer = require('webpack-dev-server');
+
+const development = require('./webpack.config')({production: false});
+const production = require('./webpack.config')({production: true});
 
 gulp.task('default', ['webpack-dev-server']);
 gulp.task('start', ['webpack-dev-server']);
 
 gulp.task('webpack-dev-server', function (callback) {
-    var compiler = webpack(development);
+    const compiler = webpack(development);
 
     // server and middleware options
-    var config = Object.assign({}, {
+    const config = Object.assign({}, {
         stats: development.stats,
         proxy: development.devServer.proxy,
         publicPath: development.output.publicPath,
@@ -73,17 +76,23 @@ gulp.task('clean', function () {
     ]);
 });
 
+gulp.task('bundle-in-memory', function (callback) {
+    const compiler = webpack(production);
+    compiler.outputFileSystem = new MemoryFs();
+    compiler.run(logStats(production, callback));
+});
+
 gulp.task('webpack-benchmark', function (callback) {
     const timesSeries = require('async/timesSeries');
-    const MemoryFs = require('memory-fs');
     const argv = require('yargs').argv;
     const n = typeof argv.n === 'number' ? argv.n : 10;
     timesSeries(n, function (n, next) {
-        let compiler = webpack(production);
-        compiler.outputFileSystem = new MemoryFs();
-        compiler.run(function (err, stats) {
-            if (err) return next(err);
-            next(null, stats.endTime - stats.startTime);
+        const startTime = new Date().getTime();
+        exec('gulp bundle-in-memory', (error, stdout, stderr) => {
+            if (error) return callback(error);
+            const total = new Date().getTime() - startTime;
+            gutil.log(total);
+            next(null, total);
         });
     }, function (err, times) {
         if (err) throw new gutil.PluginError("webpack", err);
