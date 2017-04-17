@@ -25,7 +25,6 @@ module.exports = function (env) {
         entry: {
             app: './components/App/App.jsx',
             app2: './components/App2/App2.jsx',
-            test: './components/Test/entry',
         },
         module: {
             rules: [

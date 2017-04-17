@@ -1,7 +1,7 @@
 import * as React from "react";
 
-const styleA = require('./styleA');
-const styleB = require('./styleB');
+const styleA = require('./styleA.css');
+const styleB = require('./styleB.css');
 
 
 export class ExperimentButton extends React.Component {
@@ -49,5 +49,3 @@ export class ExperimentButton extends React.Component {
         );
     }
 }
-
-export default ExperimentButton;
