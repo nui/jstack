@@ -23,13 +23,22 @@ module.exports = function (env) {
     return {
         devtool: production ? undefined : 'cheap-module-eval-source-map',
         entry: {
-            app: './components/App/App.tsx',
-            app2: './components/App2/App2.tsx',
+            app: './components/App/App.jsx',
+            app2: './components/App2/App2.jsx',
             test: './components/Test/entry',
         },
         module: {
             rules: [
-                {test: /\.tsx?$/i, loader: 'ts-loader'},
+                {
+                    test: /\.jsx?$/,
+                    exclude: /(node_modules|bower_components)/,
+                    use: {
+                        loader: 'babel-loader',
+                        options: {
+                            presets: ['env']
+                        }
+                    }
+                },
                 {
                     test: /\.css$/i,
                     use: ExtractTextPlugin.extract({
@@ -61,7 +70,7 @@ module.exports = function (env) {
         },
         plugins: getPlugins(production, stem),
         resolve: {
-            extensions: ['.css', '.js', '.less', '.ts', '.tsx']
+            extensions: ['.css', '.js', '.jsx', '.less']
         },
         output: {
             path: path.resolve(__dirname, "assets"),

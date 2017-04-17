@@ -3,12 +3,9 @@ import * as React from "react";
 const styleA = require('./styleA');
 const styleB = require('./styleB');
 
-interface States {
-    variant: string;
-}
 
-export class ExperimentButton extends React.Component<any, States> {
-    constructor(props: any) {
+export class ExperimentButton extends React.Component {
+    constructor(props) {
         super();
         this.state = {
             variant: 'A'
@@ -16,15 +13,15 @@ export class ExperimentButton extends React.Component<any, States> {
     }
 
     toggleVariant() {
-        this.setState((prevState: States) => {
+        this.setState((prevState) => {
             return {
-                variant: prevState.variant == 'A' ? 'B' : 'A'
+                variant: prevState.variant === 'A' ? 'B' : 'A'
             }
         });
     }
 
     get style() {
-        return this.state.variant == 'A' ? styleA : styleB;
+        return this.state.variant === 'A' ? styleA : styleB;
     }
 
     render() {
