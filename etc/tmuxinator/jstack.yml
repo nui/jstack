@@ -40,7 +40,7 @@ windows:
             - gulp:
                 - gulp start
             - server:
-                - ' cd backend && workon jstack'
+                - ' cd backend && pyenv activate jstack'
                 - ./manage.py runserver
   # - server: bundle exec rails s
   # - logs: tail -f log/development.log
