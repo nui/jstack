@@ -77,6 +77,7 @@ module.exports = function (env) {
             children: false,
             chunks: false,
             colors: true,
+            modules: false,
         },
         devServer: {
             proxy: {
