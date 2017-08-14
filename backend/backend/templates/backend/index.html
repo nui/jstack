@@ -17,7 +17,7 @@
 <div id="root"></div>
 {% if devServer %}
     <script src="http://localhost:8080/webpack-dev-server.js"></script>
-    <script src="http://localhost:8080/assets/{{ webpackAssets.manifest.js }}"></script>
+    <script src="http://localhost:8080/assets/{{ webpackAssets.bootstrap.js }}"></script>
     {% if webpackAssets.commons.js %}
         <script src="http://localhost:8080/assets/{{ webpackAssets.commons.js }}"></script>
     {% endif %}
@@ -28,7 +28,7 @@
     {% endif %}
     <link rel="stylesheet" href="http://localhost:8080/assets/{{ webpackAssets.app.css }}" />
 {% else %}
-    <script src="{{ assets.manifest.js }}"></script>
+    <script src="{{ assets.bootstrap.js }}"></script>
     {% if webpackAssets.commons.js %}
         <script src="{{ assets.commons.js }}"></script>
     {% endif %}

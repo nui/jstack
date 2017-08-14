@@ -5,6 +5,7 @@ const flatten = require('gulp-flatten');
 const gulp = require('gulp');
 const gutil = require('gulp-util');
 const MemoryFs = require('memory-fs');
+const replace = require('gulp-replace');
 const runSequence = require('run-sequence');
 const vinylPaths = require('vinyl-paths');
 const webpack = require('webpack');
@@ -55,11 +56,18 @@ gulp.task('bundle-watch', ['clean'], function () {
     webpack(production).watch({}, logStats(production));
 });
 
-gulp.task('bundle-ci', function (callback) {
+gulp.task('bundle-ci', (callback) => {
     runSequence('clean',
         'bundle',
+        'rewrite-sourcemap-url',
         'move-sourcemap',
         callback);
+});
+
+gulp.task('rewrite-sourcemap-url', () => {
+    return gulp.src(['assets/**/*.js', 'assets/**/*.css'], {base: './'})
+        .pipe(replace(/^(\/.# sourceMappingURL=)/gm, '$1http://localhost:5678/'))
+        .pipe(gulp.dest('.'))
 });
 
 gulp.task('move-sourcemap', function () {

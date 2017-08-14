@@ -6,7 +6,7 @@ let OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 let path = require('path');
 let ProvidePlugin = require('webpack').ProvidePlugin;
 let SourceMapDevToolPlugin = require('webpack').SourceMapDevToolPlugin;
-let UglifyJsPlugin = require('webpack').optimize.UglifyJsPlugin;
+let UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 let webpack = require('webpack');
 
 let MyPlugin = require('./plugins/MyPlugin');
@@ -24,7 +24,7 @@ module.exports = function (env) {
         devtool: production ? undefined : 'cheap-module-eval-source-map',
         entry: {
             app: './components/App/App.jsx',
-            app2: './components/App2/App2.jsx',
+            commonsChunkPluginHax: './components/commonsChunkPluginHax.js',
         },
         module: {
             rules: [
@@ -39,7 +39,7 @@ module.exports = function (env) {
                     test: /\.css$/i,
                     use: ExtractTextPlugin.extract({
                         fallback: 'style-loader',
-                        use: {loader: "css-loader", options: {modules: true}}
+                        use: {loader: "css-loader", options: {modules: true, sourceMap: true}}
                     })
                 },
                 {
@@ -47,8 +47,8 @@ module.exports = function (env) {
                     use: ExtractTextPlugin.extract({
                         fallback: 'style-loader',
                         use: [
-                            {loader: 'css-loader', options: {importLoaders: 1}},
-                            'less-loader'
+                            {loader: 'css-loader', options: {importLoaders: 1, sourceMap: true}},
+                            {loader: 'less-loader', options: {sourceMap: true}}
                         ]
                     })
                 },
@@ -70,7 +70,7 @@ module.exports = function (env) {
         },
         output: {
             path: path.resolve(__dirname, "assets"),
-            filename: stem + '.js',
+            filename: `${stem}.js`,
             publicPath: "/assets/"
         },
         stats: {
@@ -100,8 +100,8 @@ function getPlugins(production, stem) {
         }),
         new ExtractTextPlugin({filename: stem + ".css"}),
         // DON'T SWAP THESE 2 BELOW LINES, The order of CommonsChunkPlugin is important
-        new CommonsChunkPlugin({name: "commons", minChunks: 2}), // minChunks set to 2 to see effect of plugin in this setup only
-        new CommonsChunkPlugin({name: "manifest", minChunks: Infinity}),
+        new CommonsChunkPlugin({name: "commons", minChunks: 2}),
+        new CommonsChunkPlugin({name: "bootstrap", minChunks: Infinity}),
         // https://webpack.js.org/plugins/provide-plugin/
         new ProvidePlugin({
             $: 'jquery',
@@ -115,15 +115,9 @@ function getPlugins(production, stem) {
         Array.prototype.push.apply(plugins, [
             // See https://facebook.github.io/react/docs/optimizing-performance.html#use-the-production-build
             new DefinePlugin({'process.env': {NODE_ENV: JSON.stringify('production')}}),
-            new OptimizeCssAssetsPlugin({canPrint: false, cssProcessorOptions: {discardComments: {removeAll: true}}}),
+            new OptimizeCssAssetsPlugin({canPrint: false, cssProcessorOptions: {map: {inline: false}}}),
+            new SourceMapDevToolPlugin({filename: '[file].map[query]'}),
             new UglifyJsPlugin({extractComments: true, sourceMap: true}),
-            new SourceMapDevToolPlugin({
-                filename: '[file].map[query]',
-                exclude: /\.css$/i,
-                // uncomment following line
-                // then we can serve sourcemap from private location
-                // append: '\n//# sourceMappingURL=http://localhost:8888/[url]'
-            }),
         ]);
     }
     return plugins;
