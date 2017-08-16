@@ -1,30 +1,29 @@
-let AssetsPlugin = require('assets-webpack-plugin');
-let CommonsChunkPlugin = require('webpack').optimize.CommonsChunkPlugin;
-let DefinePlugin = require('webpack').DefinePlugin;
-let ExtractTextPlugin = require("extract-text-webpack-plugin");
-let OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
-let path = require('path');
-let ProvidePlugin = require('webpack').ProvidePlugin;
-let SourceMapDevToolPlugin = require('webpack').SourceMapDevToolPlugin;
-let UglifyJsPlugin = require('uglifyjs-webpack-plugin');
-let webpack = require('webpack');
+const path = require('path');
 
-let MyPlugin = require('./plugins/MyPlugin');
+const AssetsPlugin = require('assets-webpack-plugin');
+const CommonsChunkPlugin = require('webpack/lib/optimize/CommonsChunkPlugin');
+const DefinePlugin = require('webpack/lib/DefinePlugin');
+const ExtractTextPlugin = require('extract-text-webpack-plugin');
+const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
+const ProvidePlugin = require('webpack/lib/ProvidePlugin');
+const SourceMapDevToolPlugin = require('webpack/lib/SourceMapDevToolPlugin');
+const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
+
 let ExperimentPlugin = require('./plugins/ExperimentPlugin');
+let MyPlugin = require('./plugins/MyPlugin');
 
 
-module.exports = function (env) {
-    // if webpack not invoke with --env.production
+module.exports = function (env = {env: 'development'}) {
+    // if webpack not invoke with --env.env=production
     // default to development environment
-    env = env || {production: false};
-    let production = env.production === true;
+    let production = env.env === 'production';
 
     let stem = production ? '[name].[chunkhash].min' : '[name]';
     return {
         devtool: production ? undefined : 'cheap-module-eval-source-map',
         entry: {
             app: './components/App/App.jsx',
-            commonsChunkPluginHax: './components/commonsChunkPluginHax.js',
+            _hax: './components/commonsChunkHax.js',
         },
         module: {
             rules: [
@@ -69,11 +68,13 @@ module.exports = function (env) {
             extensions: ['.css', '.js', '.jsx', '.less']
         },
         output: {
+            // hashSalt: "101", // change value to invalidate CDN cache
             path: path.resolve(__dirname, "assets"),
             filename: `${stem}.js`,
             publicPath: "/assets/"
         },
         stats: {
+            assetsSort: "chunks",
             children: false,
             chunks: false,
             colors: true,

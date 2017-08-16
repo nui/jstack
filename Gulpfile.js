@@ -11,8 +11,8 @@ const vinylPaths = require('vinyl-paths');
 const webpack = require('webpack');
 const WebpackDevServer = require('webpack-dev-server');
 
-const development = require('./webpack.config')({production: false});
-const production = require('./webpack.config')({production: true});
+const development = require('./webpack.config')({env: 'development'});
+const production = require('./webpack.config')({env: 'production'});
 
 gulp.task('default', ['webpack-dev-server']);
 gulp.task('start', ['webpack-dev-server']);
