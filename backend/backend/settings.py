@@ -118,6 +118,8 @@ USE_L10N = True
 USE_TZ = True
 
 
+WEBPACK_ASSETS_DIR = BASE_DIR.parent.joinpath('assets')
+
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.10/howto/static-files/
 
@@ -125,5 +127,6 @@ STATIC_URL = '/static/'
 
 STATICFILES_DIRS = [
     str(BASE_DIR.parent),
-    str(BASE_DIR.parent.joinpath('assets'))
+    str(WEBPACK_ASSETS_DIR)
 ]
+
