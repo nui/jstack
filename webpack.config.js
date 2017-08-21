@@ -12,18 +12,24 @@ const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 let ExperimentPlugin = require('./plugins/ExperimentPlugin');
 let MyPlugin = require('./plugins/MyPlugin');
 
-
-module.exports = function (env = {env: 'development'}) {
-    // if webpack not invoke with --env.env=production
+function defaultEnv(env) {
+    // if webpack is not invoke with --env.target=production
     // default to development environment
-    let production = env.env === 'production';
+    return Object.assign({
+        target: 'development'
+    }, env);
+}
 
-    let stem = production ? '[name].[chunkhash].min' : '[name]';
+module.exports = function (env) {
+    env = defaultEnv(env);
+    const production = env.target === 'production';
+
+    const stem = production ? '[name].[chunkhash].min' : '[name]';
     return {
         devtool: production ? undefined : 'cheap-module-eval-source-map',
         entry: {
             app: './components/App/App.jsx',
-            _hax: './components/commonsChunkHax.js',
+            _hax: './components/commonsChunkHax.js', // This chunk is never used
         },
         module: {
             rules: [
@@ -68,9 +74,9 @@ module.exports = function (env = {env: 'development'}) {
             extensions: ['.css', '.js', '.jsx', '.less']
         },
         output: {
+            filename: `${stem}.js`,
             // hashSalt: "101", // change value to invalidate CDN cache
             path: path.resolve(__dirname, "assets"),
-            filename: `${stem}.js`,
             publicPath: "/assets/"
         },
         stats: {
@@ -96,10 +102,10 @@ function getPlugins(production, stem) {
     let plugins = [
         new AssetsPlugin({
             fullPath: false,
-            path: path.join(__dirname, 'assets'),
+            path: path.resolve(__dirname, 'assets'),
             prettyPrint: true
         }),
-        new ExtractTextPlugin({filename: stem + ".css"}),
+        new ExtractTextPlugin({filename: `${stem}.css`}),
         // DON'T SWAP THESE 2 BELOW LINES, The order of CommonsChunkPlugin is important
         new CommonsChunkPlugin({name: "commons", minChunks: 2}),
         new CommonsChunkPlugin({name: "bootstrap", minChunks: Infinity}),
@@ -114,8 +120,8 @@ function getPlugins(production, stem) {
     ];
     if (production) {
         Array.prototype.push.apply(plugins, [
-            // See https://facebook.github.io/react/docs/optimizing-performance.html#use-the-production-build
-            new DefinePlugin({'process.env': {NODE_ENV: JSON.stringify('production')}}),
+            // See https://webpack.js.org/plugins/define-plugin/#feature-flags
+            new DefinePlugin({'process.env.NODE_ENV': JSON.stringify('production')}),
             new OptimizeCssAssetsPlugin({canPrint: false, cssProcessorOptions: {map: {inline: false}}}),
             new SourceMapDevToolPlugin({filename: '[file].map[query]'}),
             new UglifyJsPlugin({extractComments: true, sourceMap: true}),

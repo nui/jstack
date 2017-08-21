@@ -11,8 +11,8 @@ const vinylPaths = require('vinyl-paths');
 const webpack = require('webpack');
 const WebpackDevServer = require('webpack-dev-server');
 
-const development = require('./webpack.config')({env: 'development'});
-const production = require('./webpack.config')({env: 'production'});
+const development = require('./webpack.config')({target: 'development'});
+const production = require('./webpack.config')({target: 'production'});
 
 gulp.task('default', ['webpack-dev-server']);
 gulp.task('start', ['webpack-dev-server']);
@@ -59,22 +59,23 @@ gulp.task('bundle-watch', ['clean'], function () {
 gulp.task('bundle-ci', (callback) => {
     runSequence('clean',
         'bundle',
-        'rewrite-sourcemap-url',
-        'move-sourcemap',
+        'sourcemap-rewrite',
+        'sourcemap-move',
         callback);
 });
 
-gulp.task('rewrite-sourcemap-url', () => {
+gulp.task('sourcemap-rewrite', () => {
+    const prefix = 'http://localhost:5678/';
     return gulp.src(['assets/**/*.js', 'assets/**/*.css'], {base: './'})
-        .pipe(replace(/^(\/.# sourceMappingURL=)/gm, '$1http://localhost:5678/'))
+        .pipe(replace(/^(\/.# sourceMappingURL=)/gm, `$1${prefix}`))
         .pipe(gulp.dest('.'))
 });
 
-gulp.task('move-sourcemap', function () {
-    return gulp.src('./assets/**/*.map')
+gulp.task('sourcemap-move', function () {
+    return gulp.src('assets/**/*.map')
         .pipe(vinylPaths(del))
         .pipe(flatten())
-        .pipe(gulp.dest('./sourcemaps'));
+        .pipe(gulp.dest('sourcemaps'));
 });
 
 gulp.task('clean', function () {
