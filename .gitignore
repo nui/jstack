@@ -1,8 +1,11 @@
-assets/
-node_modules/
-sourcemaps/
-.idea/
-
-npm-debug.log
-db.sqlite3
+# wildcards
+*.pyc
+.directory
 __pycache__
+db.sqlite3
+npm-debug.log
+
+.idea/
+/assets/
+/node_modules/
+/sourcemaps/

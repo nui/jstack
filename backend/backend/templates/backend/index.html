@@ -29,7 +29,7 @@
     <link rel="stylesheet" href="http://localhost:8080/assets/{{ webpackAssets.app.css }}" />
 {% else %}
     <script src="{{ assets.bootstrap.js }}"></script>
-    {% if webpackAssets.commons.js %}
+{% if assets.commons.js %}
         <script src="{{ assets.commons.js }}"></script>
     {% endif %}
 

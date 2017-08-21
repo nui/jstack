@@ -16,9 +16,6 @@ import pathlib
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = pathlib.PurePath(os.path.abspath(__file__)).parent.parent
 
-WEB_ASSETS_DIR = BASE_DIR.parent.joinpath('assets')
-WEBPACK_ASSETS_JSON = WEB_ASSETS_DIR.joinpath('webpack-assets.json')
-
 USE_DEV_SERVER = True
 
 # Quick-start development settings - unsuitable for production
@@ -127,5 +124,6 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 STATICFILES_DIRS = [
-    str(BASE_DIR.parent)
+    str(BASE_DIR.parent),
+    str(BASE_DIR.parent.joinpath('assets'))
 ]
