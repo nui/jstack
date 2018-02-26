@@ -1,11 +1,11 @@
 const path = require('path');
 
 const AssetsPlugin = require('assets-webpack-plugin');
-const CommonsChunkPlugin = require('webpack/lib/optimize/CommonsChunkPlugin');
 const DefinePlugin = require('webpack/lib/DefinePlugin');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 const ProvidePlugin = require('webpack/lib/ProvidePlugin');
+const RuntimeChunkPlugin = require('webpack/lib/optimize/RuntimeChunkPlugin');
 const SourceMapDevToolPlugin = require('webpack/lib/SourceMapDevToolPlugin');
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 
@@ -26,10 +26,9 @@ module.exports = function (env) {
 
     const stem = production ? '[name].[chunkhash].min' : '[name]';
     return {
-        devtool: production ? undefined : 'cheap-module-eval-source-map',
+        mode: production ? 'production' : 'development',
         entry: {
             app: './components/App/App.jsx',
-            _hax: './components/commonsChunkHax.js', // This chunk is never used
         },
         module: {
             rules: [
@@ -94,6 +93,27 @@ module.exports = function (env) {
                 }
             },
             publicPath: '/assets/',
+        },
+        optimization: {
+            // https://medium.com/webpack/webpack-4-code-splitting-chunk-graph-and-the-splitchunks-optimization-be739a861366
+            // https://gist.github.com/sokra/1522d586b8e5c0f5072d7565c2bee693
+            splitChunks: {
+                chunks: 'all',
+                cacheGroups: {
+                    default: {
+                        minChunks: 2,
+                        priority: -20,
+                        reuseExistingChunk: true,
+                    },
+                    vendors: {
+                        name: 'vendors',
+                        test: /[\\/]node_modules[\\/]/,
+                        priority: -10
+                    }
+                }
+            },
+            // minimize: false,
+            minimizer: [new UglifyJsPlugin({extractComments: true, sourceMap: true})]
         }
     };
 };
@@ -106,9 +126,7 @@ function getPlugins(production, stem) {
             prettyPrint: true
         }),
         new ExtractTextPlugin({filename: `${stem}.css`}),
-        // DON'T SWAP THESE 2 BELOW LINES, The order of CommonsChunkPlugin is important
-        new CommonsChunkPlugin({name: "commons", minChunks: 2}),
-        new CommonsChunkPlugin({name: "bootstrap", minChunks: Infinity}),
+        new RuntimeChunkPlugin({name: "runtime"}),
         // https://webpack.js.org/plugins/provide-plugin/
         new ProvidePlugin({
             $: 'jquery',
@@ -119,12 +137,11 @@ function getPlugins(production, stem) {
         // new ExperimentPlugin(),
     ];
     if (production) {
-        Array.prototype.push.apply(plugins, [
+        plugins.push(...[
             // See https://webpack.js.org/plugins/define-plugin/#feature-flags
             new DefinePlugin({'process.env.NODE_ENV': JSON.stringify('production')}),
             new OptimizeCssAssetsPlugin({canPrint: false, cssProcessorOptions: {map: {inline: false}}}),
             new SourceMapDevToolPlugin({filename: '[file].map[query]'}),
-            new UglifyJsPlugin({extractComments: true, sourceMap: true}),
         ]);
     }
     return plugins;

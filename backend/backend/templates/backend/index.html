@@ -17,26 +17,25 @@
 <div id="root"></div>
 {% if devServer %}
     <script src="http://localhost:8080/webpack-dev-server.js"></script>
-    <script src="http://localhost:8080/assets/{{ webpackAssets.bootstrap.js }}"></script>
-    {% if webpackAssets.commons.js %}
-        <script src="http://localhost:8080/assets/{{ webpackAssets.commons.js }}"></script>
+    <script src="http://localhost:8080/assets/{{ webpackAssets.runtime.js }}"></script>
+    {% if webpackAssets.vendors.js %}
+        <script src="http://localhost:8080/assets/{{ webpackAssets.vendors.js }}"></script>
     {% endif %}
     <script src="http://localhost:8080/assets/{{ webpackAssets.app.js }}"></script>
 
-    {% if webpackAssets.commons.css %}
-        <link rel="stylesheet" href="http://localhost:8080/assets/{{ webpackAssets.commons.css }}" />
+    {% if webpackAssets.vendors.css %}
+        <link rel="stylesheet" href="http://localhost:8080/assets/{{ webpackAssets.vendors.css }}" />
     {% endif %}
     <link rel="stylesheet" href="http://localhost:8080/assets/{{ webpackAssets.app.css }}" />
 {% else %}
-    <script src="{{ assets.bootstrap.js }}"></script>
-{% if assets.commons.js %}
-        <script src="{{ assets.commons.js }}"></script>
-    {% endif %}
-
+    <script src="{{ assets.runtime.js }}"></script>
+{% if assets.vendors.js %}
+    <script src="{{ assets.vendors.js }}"></script>
+{% endif %}
     <script src="{{ assets.app.js }}"></script>
 
-    {% if assets.commons.css %}
-        <link rel="stylesheet" href="{{ assets.commons.css }}" />
+    {% if assets.vendors.css %}
+        <link rel="stylesheet" href="{{ assets.vendors.css }}" />
     {% endif %}
     <link rel="stylesheet" href="{{ assets.app.css }}" />
 {% endif %}
