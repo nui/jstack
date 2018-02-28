@@ -3,12 +3,10 @@
     [
       "env",
       {
-        "modules": false
+        "targets": {
+          "node": "current"
+        }
       }
-    ],
-    "react"
-  ],
-  "plugins": [
-    "transform-runtime"
+    ]
   ]
 }

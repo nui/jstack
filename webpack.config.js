@@ -1,16 +1,15 @@
-const path = require('path');
+import AssetsPlugin from "assets-webpack-plugin";
+import DefinePlugin from "webpack/lib/DefinePlugin";
+import ExtractTextPlugin from "extract-text-webpack-plugin";
+import OptimizeCssAssetsPlugin from "optimize-css-assets-webpack-plugin";
+import path from "path";
+import ProvidePlugin from "webpack/lib/ProvidePlugin";
+import RuntimeChunkPlugin from "webpack/lib/optimize/RuntimeChunkPlugin";
+import SourceMapDevToolPlugin from "webpack/lib/SourceMapDevToolPlugin";
+import UglifyJsPlugin from "uglifyjs-webpack-plugin";
 
-const AssetsPlugin = require('assets-webpack-plugin');
-const DefinePlugin = require('webpack/lib/DefinePlugin');
-const ExtractTextPlugin = require('extract-text-webpack-plugin');
-const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
-const ProvidePlugin = require('webpack/lib/ProvidePlugin');
-const RuntimeChunkPlugin = require('webpack/lib/optimize/RuntimeChunkPlugin');
-const SourceMapDevToolPlugin = require('webpack/lib/SourceMapDevToolPlugin');
-const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
-
-let ExperimentPlugin = require('./plugins/ExperimentPlugin');
-let MyPlugin = require('./plugins/MyPlugin');
+import ExperimentPlugin from "./plugins/ExperimentPlugin";
+import MyPlugin from "./plugins/MyPlugin";
 
 function defaultEnv(env) {
     // if webpack is not invoke with --env.target=production
@@ -20,7 +19,7 @@ function defaultEnv(env) {
     }, env);
 }
 
-module.exports = function (env) {
+export default function (env) {
     env = defaultEnv(env);
     const production = env.target === 'production';
 
@@ -34,9 +33,17 @@ module.exports = function (env) {
             rules: [
                 {
                     test: /\.jsx?$/,
-                    exclude: /(node_modules|bower_components)/,
+                    exclude: /node_modules/,
                     use: {
                         loader: 'babel-loader',
+                        options: {
+                            babelrc: false,
+                            presets: [
+                                ["env", {"modules": false}],
+                                "react"
+                            ],
+                            plugins: ["transform-runtime"],
+                        },
                     }
                 },
                 {
@@ -107,7 +114,7 @@ module.exports = function (env) {
                     },
                     vendors: {
                         name: 'vendors',
-                        test: /[\\/]node_modules[\\/]/,
+                        test: /node_modules/,
                         priority: -10
                     }
                 }

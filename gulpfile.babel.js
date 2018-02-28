@@ -1,89 +1,88 @@
-const exec = require('child_process').exec;
+import del from "del";
+import flatten from "gulp-flatten";
+import gulp from "gulp";
+import MemoryFs from "memory-fs";
+import replace from "gulp-replace";
+import vinylPaths from "vinyl-paths";
+import webpack from "webpack";
+import WebpackDevServer from "webpack-dev-server";
+import {exec} from "child_process";
+import log from 'fancy-log';
+import PluginError from 'plugin-error';
 
-const del = require('del');
-const flatten = require('gulp-flatten');
-const gulp = require('gulp');
-const gutil = require('gulp-util');
-const MemoryFs = require('memory-fs');
-const replace = require('gulp-replace');
-const runSequence = require('run-sequence');
-const vinylPaths = require('vinyl-paths');
-const webpack = require('webpack');
-const WebpackDevServer = require('webpack-dev-server');
+import makeConfig from './webpack.config';
 
-const development = require('./webpack.config')({target: 'development'});
-const production = require('./webpack.config')({target: 'production'});
+const development = makeConfig({target: 'development'});
+const production = makeConfig({target: 'production'});
 
-gulp.task('default', ['webpack-dev-server']);
-gulp.task('start', ['webpack-dev-server']);
+gulp.task('default', webpackDevServer);
+gulp.task('start', webpackDevServer);
 
-gulp.task('webpack-dev-server', function (callback) {
+function webpackDevServer(callback) {
     const compiler = webpack(development);
-
     // server and middleware options
-    const config = Object.assign({}, {
+    const config = {
         stats: development.stats,
         proxy: development.devServer.proxy,
         publicPath: development.output.publicPath,
-    });
-
+    };
     new WebpackDevServer(compiler, config)
         .listen(8080, "localhost", function (err) {
-            if (err) throw new gutil.PluginError("webpack-dev-server", err);
+            if (err) throw new PluginError("webpack-dev-server", err);
             // Server listening
-            gutil.log("[webpack-dev-server]", "http://localhost:8080/webpack-dev-server/backend");
+            log("[webpack-dev-server]", "http://localhost:8080/webpack-dev-server/backend");
             callback();
         });
-});
+}
+
+gulp.task('server', webpackDevServer);
 
 function logStats(config, callback) {
     return function (err, stats) {
-        if (err) throw new gutil.PluginError("webpack", err);
-        gutil.log("[webpack]", stats.toString(config.stats));
-        if (callback) callback();
+        if (err) throw new PluginError("webpack", err);
+        log("[webpack]", stats.toString(config.stats));
+        callback && callback();
     }
 }
 
-gulp.task('watch', ['clean'], function () {
+export function watch() {
     webpack(development).watch({}, logStats(development));
-});
+}
 
-gulp.task('bundle', function (callback) {
+export function bundle(callback) {
     webpack(production).run(logStats(production, callback));
-});
+}
 
-gulp.task('bundle-watch', ['clean'], function () {
+gulp.task('clean-bundle', gulp.series(clean, bundle));
+
+function bundleWatch() {
     webpack(production).watch({}, logStats(production));
-});
+}
 
-gulp.task('bundle-ci', (callback) => {
-    runSequence('clean',
-        'bundle',
-        'sourcemap-rewrite',
-        'sourcemap-move',
-        callback);
-});
+gulp.task('clean-watch', gulp.series(clean, watch));
+gulp.task('bundle-watch', gulp.series(clean, bundleWatch));
+gulp.task('bundle-ci', gulp.series(clean, bundle, rewriteSourcemap, moveSourcemap));
 
-gulp.task('sourcemap-rewrite', () => {
+function rewriteSourcemap() {
     const prefix = 'http://localhost:5678/';
     return gulp.src(['assets/**/*.js', 'assets/**/*.css'], {base: './'})
         .pipe(replace(/^(\/.# sourceMappingURL=)/gm, `$1${prefix}`))
         .pipe(gulp.dest('.'))
-});
+}
 
-gulp.task('sourcemap-move', function () {
+function moveSourcemap() {
     return gulp.src('assets/**/*.map')
         .pipe(vinylPaths(del))
         .pipe(flatten())
         .pipe(gulp.dest('sourcemaps'));
-});
+}
 
-gulp.task('clean', function () {
+export function clean() {
     return del([
         'assets/**/*',
         'sourcemaps/*',
     ]);
-});
+}
 
 gulp.task('bundle-in-memory', function (callback) {
     const compiler = webpack(production);
@@ -100,16 +99,16 @@ gulp.task('webpack-benchmark', function (callback) {
         exec('gulp bundle-in-memory', (error, stdout, stderr) => {
             if (error) return callback(error);
             const total = new Date().getTime() - startTime;
-            gutil.log(total);
+            log(total);
             next(null, total);
         });
     }, function (err, times) {
-        if (err) throw new gutil.PluginError("webpack", err);
+        if (err) throw new PluginError("webpack", err);
         let sum = times.reduce(function (acc, val) {
             return acc + val;
         }, 0);
-        gutil.log(times);
-        gutil.log('Average time:', sum / 1000 / times.length, 's.');
+        log(times);
+        log('Average time:', sum / 1000 / times.length, 's.');
         callback();
     });
 });
