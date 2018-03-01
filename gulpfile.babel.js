@@ -61,7 +61,7 @@ function bundleWatch() {
 
 gulp.task('clean-watch', gulp.series(clean, watch));
 gulp.task('bundle-watch', gulp.series(clean, bundleWatch));
-gulp.task('bundle-ci', gulp.series(clean, bundle, rewriteSourcemap, moveSourcemap));
+gulp.task('bundle-ci', gulp.series(clean, bundle, gulp.parallel(rewriteSourcemap, moveSourcemap)));
 
 function rewriteSourcemap() {
     const prefix = 'http://localhost:5678/';
