@@ -119,8 +119,6 @@ export default function (env) {
                     }
                 }
             },
-            // minimize: false,
-            minimizer: [new UglifyJsPlugin({extractComments: true, sourceMap: true})]
         }
     };
 };
@@ -149,6 +147,7 @@ function getPlugins(production, stem) {
             new DefinePlugin({'process.env.NODE_ENV': JSON.stringify('production')}),
             new OptimizeCssAssetsPlugin({canPrint: false, cssProcessorOptions: {map: {inline: false}}}),
             new SourceMapDevToolPlugin({filename: '[file].map[query]'}),
+            new UglifyJsPlugin({extractComments: true, sourceMap: true}),
         ]);
     }
     return plugins;
