@@ -39,10 +39,10 @@ export default function (env) {
                         options: {
                             babelrc: false,
                             presets: [
-                                ["env", {"modules": false}],
-                                "react"
+                                ["@babel/preset-env", {"modules": false}],
+                                "@babel/preset-react"
                             ],
-                            plugins: ["transform-runtime"],
+                            plugins: ["@babel/transform-runtime"],
                         },
                     }
                 },
